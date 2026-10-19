@@ -7,9 +7,8 @@ YouTube, TikTok, Instagram, podcasts and blogs. One plan at $5/month, with 5 fre
 shadcn/ui · Supabase (Postgres + Auth) · Drizzle ORM · Anthropic Claude · Stripe · Zod · Vitest ·
 Playwright.
 
-> Build status: **Phase 3 — all six AI tools.** Idea Generator, Script Writer, Hook & Title Lab,
-> SEO & Keywords, Aesthetics Studio and Caption & Repurposer are complete. Later phases add the
-> library, brand voice, calendar and billing.
+> Build status: **Phase 4 — workspace.** All six AI tools plus the Library, Brand Voice (with a
+> 3-step onboarding) and the Content Calendar are done. Phase 5 adds Stripe billing.
 
 ## Getting started
 
@@ -132,3 +131,19 @@ SEO results are AI-suggested, and the UI says so clearly. To add live search vol
 `KeywordProvider` in `src/lib/seo/keyword-provider.ts` and return it from `getKeywordProvider()`.
 The metrics are attached to every SEO result and shown next to each keyword. If the provider
 fails, the generation still succeeds and simply shows no metrics.
+
+## Workspace features
+
+- **Brand voice** (`/settings/brand-voice`, plus a 3-step onboarding after signup): niche,
+  platforms, audience, tone, words to use or avoid, and an example of your content. It's added to
+  every prompt automatically, and each tool has a toggle to turn it off for one generation.
+- **Library** (`/library`): everything you've saved.
+  - Search runs across titles and content (Postgres full-text search).
+  - Filter by tool, tag or favorites. Filters live in the URL, so they can be bookmarked.
+  - Each item can be favorited, tagged, duplicated, deleted or added to the calendar.
+- **Content calendar** (`/calendar`): month and week views.
+  - Drag saved ideas and scripts onto a day, or drag entries between days. This works with a
+    mouse, by touch (press and hold), or by keyboard (Space to pick up, arrow keys to move, Space
+    to drop).
+  - Each entry has a status (idea → scripted → filmed → posted), a platform and notes. Its date
+    field is a second, non-drag way to move it.
