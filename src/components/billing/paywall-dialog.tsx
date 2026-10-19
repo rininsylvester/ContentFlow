@@ -1,7 +1,6 @@
 "use client";
 
 import { Check, Sparkles } from "lucide-react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PLAN } from "@/lib/billing/plan";
+import { SubscribeButton } from "./billing-actions";
 
 const FEATURES = [
   `${PLAN.monthlyGenerationCap} generations every month`,
@@ -60,11 +60,7 @@ export function PaywallDialog({
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
             Not now
           </Button>
-          {!capReached && (
-            <Button asChild>
-              <Link href="/settings/billing">Subscribe for ${PLAN.priceUsdMonthly}/month</Link>
-            </Button>
-          )}
+          {!capReached && <SubscribeButton />}
         </DialogFooter>
       </DialogContent>
     </Dialog>

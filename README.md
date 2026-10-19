@@ -7,8 +7,9 @@ YouTube, TikTok, Instagram, podcasts and blogs. One plan at $5/month, with 5 fre
 shadcn/ui · Supabase (Postgres + Auth) · Drizzle ORM · Anthropic Claude · Stripe · Zod · Vitest ·
 Playwright.
 
-> Build status: **Phase 4 — workspace.** All six AI tools plus the Library, Brand Voice (with a
-> 3-step onboarding) and the Content Calendar are done. Phase 5 adds Stripe billing.
+> Build status: **Phase 5 — billing.** All tools, the workspace features and Stripe billing
+> (5-generation trial, then $5/month with a 400-generation fair-use cap) are done. Phase 6 adds
+> the landing page, the end-to-end test and deployment docs.
 
 ## Getting started
 
@@ -147,3 +148,33 @@ fails, the generation still succeeds and simply shows no metrics.
     to drop).
   - Each entry has a status (idea → scripted → filmed → posted), a platform and notes. Its date
     field is a second, non-drag way to move it.
+
+## Stripe setup
+
+1. **Create the product** in the Stripe Dashboard (Product catalog): "CreatorHub Pro" with a
+   recurring price of $5.00 USD per month. Copy the price id (`price_...`) into `STRIPE_PRICE_ID`.
+2. **API key:** Developers → API keys → secret key → `STRIPE_SECRET_KEY`.
+3. **Webhook:** Developers → Webhooks → Add endpoint `https://YOUR-DOMAIN/api/stripe/webhook`
+   with these events:
+   - `checkout.session.completed`
+   - `customer.subscription.updated`
+   - `customer.subscription.deleted`
+   - `invoice.payment_failed`
+
+   Copy the signing secret (`whsec_...`) into `STRIPE_WEBHOOK_SECRET`.
+
+4. **Customer portal:** Settings → Billing → Customer portal → enable it and allow customers to
+   cancel and update payment methods.
+5. **Local testing:** run `stripe listen --forward-to localhost:3000/api/stripe/webhook` and use
+   the `whsec_...` value it prints as `STRIPE_WEBHOOK_SECRET`.
+
+How access works:
+
+- **Trial:** 5 generations, no card needed.
+- **Subscribed:** 400 generations per Stripe billing period, enforced server-side in every AI
+  request.
+- **`past_due`:** access continues while Stripe retries the payment.
+- **Canceled:** access continues until the end of the paid period.
+- **Webhooks:** signatures are verified, processed event ids are stored so retries don't apply
+  twice, and every handler re-syncs the full subscription state, so events arriving out of order
+  can't leave stale data.
