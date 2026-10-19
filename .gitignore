@@ -44,6 +44,3 @@ next-env.d.ts
 # testing
 /playwright-report
 /test-results
-
-# local demo database
-/.demo

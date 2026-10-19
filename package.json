@@ -18,8 +18,7 @@
     "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "bootstrap": "node scripts/bootstrap.mjs",
-    "test:e2e": "playwright test",
-    "demo": "node scripts/demo.mjs"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.135.0",
@@ -45,8 +44,6 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
-    "@electric-sql/pglite": "0.5.10",
-    "@electric-sql/pglite-socket": "0.2.13",
     "@playwright/test": "1.64.1",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/auth";
-import { getPriceId, getStripe, isBillingConfigured } from "@/lib/billing/stripe";
+import { getPriceId, getStripe } from "@/lib/billing/stripe";
 import { hasActiveSubscription } from "@/lib/billing/usage-summary";
 import { setStripeCustomerId } from "@/lib/db/queries/billing-users";
 import { findUserById } from "@/lib/db/queries/users";
@@ -25,9 +25,6 @@ export async function POST(request: Request) {
   if (hasActiveSubscription(user.subscriptionStatus, user.currentPeriodEnd)) {
     return NextResponse.redirect(billingUrl(), 303);
   }
-
-  if (!isBillingConfigured())
-    return NextResponse.redirect(billingUrl("?error=not_configured"), 303);
 
   try {
     const stripe = getStripe();
