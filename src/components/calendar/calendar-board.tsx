@@ -352,7 +352,7 @@ export function CalendarBoard({
             {savedItems.length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 Nothing saved yet.{" "}
-                <Link href="/ideas" className="text-primary underline-offset-4 hover:underline">
+                <Link href="/ideas" className="text-primary underline underline-offset-4">
                   Generate ideas
                 </Link>{" "}
                 and press Save.

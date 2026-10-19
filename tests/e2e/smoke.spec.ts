@@ -66,3 +66,27 @@ test("the test-only signup endpoint validates its input", async ({ request }) =>
   const res = await request.post("/api/e2e/signup", { data: { email: "not-an-email" } });
   expect(res.status()).toBe(400);
 });
+
+test("every app page passes WCAG 2.1 AA checks", async ({ page }) => {
+  const res = await page.request.post("/api/e2e/signup", {
+    data: { email: `a11y-${Date.now()}@test.dev` },
+  });
+  expect(res.ok()).toBe(true);
+  for (const path of [
+    "/scripts",
+    "/hooks",
+    "/seo",
+    "/aesthetics",
+    "/repurpose",
+    "/library",
+    "/calendar",
+    "/settings/brand-voice",
+    "/settings/billing",
+    "/terms",
+    "/privacy",
+  ]) {
+    await page.goto(path);
+    await settled(page);
+    await test.step(path, () => expectAccessible(page));
+  }
+});

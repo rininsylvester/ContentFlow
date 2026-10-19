@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { CalendarBoard } from "@/components/calendar/calendar-board";
 import { ToolHeader } from "@/components/tools/tool-header";
@@ -16,7 +17,10 @@ async function CalendarLoader({
 }: {
   searchParams: PageProps<"/calendar">["searchParams"];
 }) {
-  const { view, anchor, days, from, to } = parseCalendarParams(await searchParams);
+  const raw = await searchParams;
+  // "Today" (the default anchor) is per-request, so opt out of prerendering before reading the clock.
+  await connection();
+  const { view, anchor, days, from, to } = parseCalendarParams(raw);
   const user = await getCurrentUser();
   const [entries, savedItems] = await Promise.all([
     listEntries(user.id, from, to),
