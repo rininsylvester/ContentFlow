@@ -167,4 +167,27 @@ describe.skipIf(!enabled)("generation pipeline (integration)", () => {
     expect((error as AiError).retryAfterSeconds).toBeGreaterThan(0);
     expect(await trialUsed(userId)).toBe(0);
   });
+
+  it.each([
+    ["hooks", { topic: "Editing faster", platform: "YouTube" }],
+    ["seo", { topic: "Home espresso", platform: "YouTube" }],
+    ["aesthetics", { niche: "Cooking", vibe: "Cozy, warm", platform: "YouTube" }],
+    ["repurpose", { source: "x".repeat(60) }],
+  ] as const)("runs the %s tool end to end", async (taskId, input) => {
+    const stream = await startGeneration({
+      userId,
+      task: TASKS[taskId],
+      input,
+      useBrandVoice: false,
+      signal: new AbortController().signal,
+    });
+    const done = (await readEvents(stream)).at(-1);
+    expect(done?.type).toBe("done");
+    const [row] = await getDb().select().from(generations).where(eq(generations.userId, userId));
+    expect(row).toMatchObject({ tool: taskId, status: "succeeded", promptVersion: `${taskId}@v1` });
+    if (taskId === "seo" && done?.type === "done") {
+      expect(done.output).toMatchObject({ keywordData: { source: "ai" } });
+      expect(row?.output).toMatchObject({ keywordData: { source: "ai" } });
+    }
+  });
 });

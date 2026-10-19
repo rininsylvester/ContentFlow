@@ -2,9 +2,9 @@
 
 import { Loader2, RefreshCw } from "lucide-react";
 import { useState } from "react";
-import { PaywallDialog } from "@/components/billing/paywall-dialog";
+import { usePaywall } from "@/components/billing/use-paywall";
 import { CopyButton } from "@/components/output/copy-button";
-import { GenerationErrorAlert, isPaywallError } from "@/components/output/generation-error";
+import { GenerationErrorAlert } from "@/components/output/generation-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -91,12 +91,10 @@ export function SectionCard({
 }) {
   const [instruction, setInstruction] = useState("");
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const [paywallOpen, setPaywallOpen] = useState(false);
+  const { onError, paywall } = usePaywall();
   const regen = useGeneration<ScriptSection>("script-section", {
     onDone: (next) => onChange(next),
-    onError: (error) => {
-      if (isPaywallError(error)) setPaywallOpen(true);
-    },
+    onError,
   });
   const id = `section-${index}`;
 
@@ -238,13 +236,7 @@ export function SectionCard({
       <div className="mt-3 empty:hidden">
         <GenerationErrorAlert error={regen.error} onRetry={regenerate} />
       </div>
-      {isPaywallError(regen.error) && (
-        <PaywallDialog
-          open={paywallOpen}
-          onOpenChange={setPaywallOpen}
-          reason={regen.error?.code === "cap_reached" ? "cap_reached" : "trial_exhausted"}
-        />
-      )}
+      {paywall}
     </section>
   );
 }

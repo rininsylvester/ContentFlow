@@ -4,9 +4,9 @@ import { Bookmark, BookmarkCheck, ChevronDown, Loader2, PenLine, Sparkles } from
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { PaywallDialog } from "@/components/billing/paywall-dialog";
+import { usePaywall } from "@/components/billing/use-paywall";
 import { CopyButton } from "@/components/output/copy-button";
-import { GenerationErrorAlert, isPaywallError } from "@/components/output/generation-error";
+import { GenerationErrorAlert } from "@/components/output/generation-error";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -54,12 +54,10 @@ export function IdeaCard({
   const [saved, setSaved] = useState(false);
   const [saving, startSaving] = useTransition();
   const [expanded, setExpanded] = useState(false);
-  const [paywallOpen, setPaywallOpen] = useState(false);
+  const { onError, paywall } = usePaywall();
   const expand = useGeneration<IdeaExpansion>("ideas-expand", {
     onDone: () => setExpanded(true),
-    onError: (error) => {
-      if (isPaywallError(error)) setPaywallOpen(true);
-    },
+    onError,
   });
 
   const ideaText = `${idea.title}\n\nAngle: ${idea.angle}\nHook: ${idea.hook}\nWhy it works: ${idea.whyItWorks}\nDifficulty: ${idea.difficulty}`;
@@ -206,13 +204,7 @@ export function IdeaCard({
         </div>
       )}
       <GenerationErrorAlert error={expand.error} onRetry={runExpand} />
-      {isPaywallError(expand.error) && (
-        <PaywallDialog
-          open={paywallOpen}
-          onOpenChange={setPaywallOpen}
-          reason={expand.error?.code === "cap_reached" ? "cap_reached" : "trial_exhausted"}
-        />
-      )}
+      {paywall}
     </article>
   );
 }

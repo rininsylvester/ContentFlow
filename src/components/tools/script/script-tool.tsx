@@ -2,8 +2,8 @@
 
 import { Loader2, Square, Wand2 } from "lucide-react";
 import { useState } from "react";
-import { PaywallDialog } from "@/components/billing/paywall-dialog";
-import { GenerationErrorAlert, isPaywallError } from "@/components/output/generation-error";
+import { usePaywall } from "@/components/billing/use-paywall";
+import { GenerationErrorAlert } from "@/components/output/generation-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -86,15 +86,14 @@ export function ScriptTool() {
     },
   );
   const [submitted, setSubmitted] = useState<ScriptInput | null>(null);
-  const [paywallOpen, setPaywallOpen] = useState(false);
+
+  const { onError, paywall } = usePaywall();
 
   const gen = useGeneration<ScriptOutput>("script", {
     onDone: (script, generationId) => {
       if (submitted) setResult({ value: { script, generationId, input: submitted } });
     },
-    onError: (error) => {
-      if (isPaywallError(error)) setPaywallOpen(true);
-    },
+    onError,
   });
 
   const update = <K extends keyof Form>(key: K, value: Form[K]) =>
@@ -255,13 +254,7 @@ export function ScriptTool() {
         )}
       </section>
 
-      {isPaywallError(gen.error) && (
-        <PaywallDialog
-          open={paywallOpen}
-          onOpenChange={setPaywallOpen}
-          reason={gen.error?.code === "cap_reached" ? "cap_reached" : "trial_exhausted"}
-        />
-      )}
+      {paywall}
     </div>
   );
 }

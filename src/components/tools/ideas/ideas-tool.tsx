@@ -2,8 +2,8 @@
 
 import { Loader2, Square, Wand2 } from "lucide-react";
 import { useState } from "react";
-import { PaywallDialog } from "@/components/billing/paywall-dialog";
-import { GenerationErrorAlert, isPaywallError } from "@/components/output/generation-error";
+import { usePaywall } from "@/components/billing/use-paywall";
+import { GenerationErrorAlert } from "@/components/output/generation-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -60,11 +60,9 @@ const IDEA_COUNT = 10;
 export function IdeasTool() {
   const [form, setForm] = usePersistentState<Form>(DRAFT_KEYS.ideas, INITIAL);
   const [submitted, setSubmitted] = useState<IdeasInput | null>(null);
-  const [paywallOpen, setPaywallOpen] = useState(false);
+  const { onError, paywall } = usePaywall();
   const gen = useGeneration<IdeasOutput>("ideas", {
-    onError: (error) => {
-      if (isPaywallError(error)) setPaywallOpen(true);
-    },
+    onError,
   });
 
   const update = <K extends keyof Form>(key: K, value: Form[K]) =>
@@ -213,13 +211,7 @@ export function IdeasTool() {
         </div>
       </section>
 
-      {isPaywallError(gen.error) && (
-        <PaywallDialog
-          open={paywallOpen}
-          onOpenChange={setPaywallOpen}
-          reason={gen.error?.code === "cap_reached" ? "cap_reached" : "trial_exhausted"}
-        />
-      )}
+      {paywall}
     </div>
   );
 }

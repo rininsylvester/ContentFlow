@@ -1,5 +1,9 @@
 import type { IdeaExpansion, IdeasOutput } from "./schemas/ideas";
+import type { AestheticsOutput } from "./schemas/aesthetics";
+import type { HooksOutput } from "./schemas/hooks";
+import type { RepurposeOutput } from "./schemas/repurpose";
 import type { ScriptOutput, ScriptSection } from "./schemas/script";
+import type { SeoOutput } from "./schemas/seo";
 import type { TaskId } from "./models";
 
 /**
@@ -47,7 +51,99 @@ const script: ScriptOutput = {
   estimatedDuration: "60 seconds",
 };
 
+const FRAMEWORKS = ["curiosity-gap", "contrarian", "listicle", "story", "how-to"] as const;
+const hooks: HooksOutput = {
+  hooks: Array.from({ length: 15 }, (_, i) => ({
+    text: `Sample hook ${i + 1}: nobody tells beginners this`,
+    framework: FRAMEWORKS[i % 5] ?? "story",
+    reason: "Creates an information gap the viewer wants closed.",
+    score: 10 - (i % 6),
+  })),
+};
+
+const seo: SeoOutput = {
+  primaryKeyword: "home espresso for beginners",
+  searchIntent: "informational",
+  secondaryKeywords: ["espresso at home", "best beginner espresso machine", "how to pull a shot"],
+  longTailKeywords: [
+    "how to make espresso at home without a machine",
+    "espresso grind size for beginners",
+    "cheap espresso setup under 300",
+  ],
+  optimizedTitle: "Home Espresso for Beginners: Pull Your First Great Shot",
+  description:
+    "Learn home espresso from scratch. In this guide you'll set up, dial in and pull your first great shot.",
+  tags: ["espresso", "home barista", "coffee", "espresso tutorial"],
+  hashtags: { broad: ["#coffee", "#espresso"], niche: ["#homebarista", "#espressoathome"] },
+};
+
+const aesthetics: AestheticsOutput = {
+  palette: [
+    { hex: "#1F1A17", name: "Roast", role: "text" },
+    { hex: "#F4EDE4", name: "Oat milk", role: "background" },
+    { hex: "#C8742B", name: "Caramel", role: "primary" },
+    { hex: "#6B8F71", name: "Sage", role: "accent" },
+    { hex: "#E9B44C", name: "Honey", role: "highlight" },
+  ],
+  fontPairings: [
+    {
+      heading: "Playfair Display",
+      body: "Inter",
+      why: "Editorial warmth with a clean, readable body.",
+    },
+    {
+      heading: "DM Serif Display",
+      body: "DM Sans",
+      why: "A matched family that feels cozy but modern.",
+    },
+  ],
+  visualStyle: "Warm, film-inspired look with soft grain, slow pacing and natural textures.",
+  lighting: ["Window light from 45 degrees", "Warm practical lamp in the background"],
+  camera: ["35mm lens at eye level", "Slow push-ins on key moments"],
+  thumbnails: [
+    {
+      concept: "Before and after",
+      layout: "Split frame",
+      text: "Worst to best shot",
+      expression: "Surprised",
+      contrast: "Dark left, bright right",
+    },
+    {
+      concept: "Close-up pour",
+      layout: "Centered subject",
+      text: "Do this first",
+      expression: "Focused",
+      contrast: "Caramel on deep brown",
+    },
+  ],
+  shotList: [
+    { shot: "Beans pouring into grinder", purpose: "Opening texture" },
+    { shot: "Tamping close-up", purpose: "Show technique" },
+    { shot: "Extraction slow motion", purpose: "Payoff" },
+    { shot: "Talking head by the window", purpose: "Explain the steps" },
+  ],
+};
+
+const repurpose: RepurposeOutput = {
+  shortCaption: "Your mornings are about to change. Save this for tomorrow. #routine #productivity",
+  youtubeDescription:
+    "The 5-minute routine nobody talks about.\n\nIn this video I break down the exact steps.",
+  thread: [
+    "I tried a 5-minute morning routine for 30 days. Here's what happened:",
+    "Day 1 was rough.",
+    "By day 30 it was automatic. Would you try it?",
+  ],
+  linkedinPost:
+    "Five minutes changed my mornings.\n\nHere's the routine, and what I learned.\n\nWhat's yours?",
+  newsletterBlurb:
+    "This week: the five-minute routine that stuck when nothing else did, and why it works.",
+};
+
 const FIXTURES: Record<TaskId, unknown> = {
+  hooks,
+  seo,
+  aesthetics,
+  repurpose,
   ideas,
   "ideas-expand": expansion,
   script,

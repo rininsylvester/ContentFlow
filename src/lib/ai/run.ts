@@ -120,7 +120,7 @@ export async function startGeneration(req: GenerationRequest): Promise<ReadableS
             ? ({ ok: false, error: "Output was cut off" } as const)
             : parseModelOutput(result.text, req.task.outputSchema);
           if (parsed.ok) {
-            output = parsed.data;
+            output = req.task.enrich ? await req.task.enrich(parsed.data, req.input) : parsed.data;
             break;
           }
           console.warn(`[ai] ${req.task.id} attempt ${attempt} invalid: ${parsed.error}`);

@@ -1,8 +1,15 @@
-import { ToolPlaceholderPage } from "@/components/tools/tool-placeholder-page";
+import { AestheticsTool } from "@/components/tools/aesthetics/aesthetics-tool";
+import { ToolHeader } from "@/components/tools/tool-header";
 import { findNavItem } from "@/lib/tools";
 
-export const metadata = { title: findNavItem("aesthetics").label };
+const item = findNavItem("aesthetics");
+export const metadata = { title: item.label };
 
 export default function AestheticsPage() {
-  return <ToolPlaceholderPage id="aesthetics" phase={3} />;
+  return (
+    <div className="mx-auto flex max-w-6xl flex-col gap-8">
+      <ToolHeader item={item} />
+      <AestheticsTool />
+    </div>
+  );
 }

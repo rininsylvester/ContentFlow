@@ -1,8 +1,15 @@
-import { ToolPlaceholderPage } from "@/components/tools/tool-placeholder-page";
+import { RepurposeTool } from "@/components/tools/repurpose/repurpose-tool";
+import { ToolHeader } from "@/components/tools/tool-header";
 import { findNavItem } from "@/lib/tools";
 
-export const metadata = { title: findNavItem("repurpose").label };
+const item = findNavItem("repurpose");
+export const metadata = { title: item.label };
 
 export default function RepurposePage() {
-  return <ToolPlaceholderPage id="repurpose" phase={3} />;
+  return (
+    <div className="mx-auto flex max-w-6xl flex-col gap-8">
+      <ToolHeader item={item} />
+      <RepurposeTool />
+    </div>
+  );
 }

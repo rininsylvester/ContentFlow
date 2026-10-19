@@ -46,3 +46,33 @@ export const TONE_SUGGESTIONS = [
   "Calm and thoughtful",
   "Inspirational",
 ] as const;
+
+export const HOOK_FRAMEWORKS = [
+  "curiosity-gap",
+  "contrarian",
+  "listicle",
+  "story",
+  "how-to",
+] as const;
+export const HOOK_FRAMEWORK_LABELS: Record<(typeof HOOK_FRAMEWORKS)[number], string> = {
+  "curiosity-gap": "Curiosity gap",
+  contrarian: "Contrarian",
+  listicle: "Listicle",
+  story: "Story",
+  "how-to": "How-to",
+};
+
+export const SEARCH_INTENTS = [
+  "informational",
+  "navigational",
+  "commercial",
+  "transactional",
+] as const;
+
+export const REPURPOSE_FORMATS = [
+  { key: "shortCaption", label: "TikTok / Reels caption" },
+  { key: "youtubeDescription", label: "YouTube description" },
+  { key: "thread", label: "X / Threads thread" },
+  { key: "linkedinPost", label: "LinkedIn post" },
+  { key: "newsletterBlurb", label: "Newsletter blurb" },
+] as const;

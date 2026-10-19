@@ -7,8 +7,9 @@ YouTube, TikTok, Instagram, podcasts and blogs. One plan at $5/month, with 5 fre
 shadcn/ui · Supabase (Postgres + Auth) · Drizzle ORM · Anthropic Claude · Stripe · Zod · Vitest ·
 Playwright.
 
-> Build status: **Phase 2 — AI layer, Idea Generator, Script Writer.** Later phases add the
-> remaining tools, library, calendar and billing.
+> Build status: **Phase 3 — all six AI tools.** Idea Generator, Script Writer, Hook & Title Lab,
+> SEO & Keywords, Aesthetics Studio and Caption & Repurposer are complete. Later phases add the
+> library, brand voice, calendar and billing.
 
 ## Getting started
 
@@ -124,3 +125,10 @@ psql "$TEST_DATABASE_URL" -f tests/integration/supabase-stub.sql   # once, on an
 DATABASE_URL="$TEST_DATABASE_URL" pnpm db:migrate
 TEST_DATABASE_URL=postgresql://... pnpm test:integration
 ```
+
+### Plugging in real keyword data
+
+SEO results are AI-suggested, and the UI says so clearly. To add live search volume, implement
+`KeywordProvider` in `src/lib/seo/keyword-provider.ts` and return it from `getKeywordProvider()`.
+The metrics are attached to every SEO result and shown next to each keyword. If the provider
+fails, the generation still succeeds and simply shows no metrics.

@@ -20,7 +20,16 @@ export const MODELS = {
 export type ModelKey = keyof typeof MODELS;
 export type ModelConfig = (typeof MODELS)[ModelKey];
 
-export const TASK_IDS = ["ideas", "ideas-expand", "script", "script-section"] as const;
+export const TASK_IDS = [
+  "ideas",
+  "ideas-expand",
+  "script",
+  "script-section",
+  "hooks",
+  "seo",
+  "aesthetics",
+  "repurpose",
+] as const;
 export type TaskId = (typeof TASK_IDS)[number];
 
 export const MODEL_FOR_TASK: Record<TaskId, ModelKey> = {
@@ -28,6 +37,10 @@ export const MODEL_FOR_TASK: Record<TaskId, ModelKey> = {
   "ideas-expand": "haiku",
   script: "haiku",
   "script-section": "haiku",
+  hooks: "haiku",
+  seo: "haiku",
+  aesthetics: "haiku",
+  repurpose: "haiku",
 };
 
 /**
