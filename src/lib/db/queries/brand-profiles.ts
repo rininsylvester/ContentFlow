@@ -11,3 +11,16 @@ export async function getBrandProfile(userId: string): Promise<BrandProfile | un
     .limit(1);
   return row;
 }
+
+export async function upsertBrandProfile(
+  userId: string,
+  values: Omit<typeof brandProfiles.$inferInsert, "userId" | "createdAt" | "updatedAt">,
+): Promise<void> {
+  await getDb()
+    .insert(brandProfiles)
+    .values({ userId, ...values })
+    .onConflictDoUpdate({
+      target: brandProfiles.userId,
+      set: { ...values, updatedAt: new Date() },
+    });
+}

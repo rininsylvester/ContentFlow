@@ -11,6 +11,7 @@ export const PLATFORMS = [
   "LinkedIn",
   "X / Threads",
 ] as const;
+export type Platform = (typeof PLATFORMS)[number];
 
 export const GOALS = ["grow", "sell", "educate", "entertain"] as const;
 export const GOAL_LABELS: Record<(typeof GOALS)[number], string> = {
