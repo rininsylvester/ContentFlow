@@ -40,3 +40,9 @@ export function getWebhookSecret(): string {
   if (!secret) throw new BillingNotConfiguredError("STRIPE_WEBHOOK_SECRET");
   return secret;
 }
+
+/** Whether Checkout can work on this server (secret key and price configured). */
+export function isBillingConfigured(): boolean {
+  const env = serverEnv();
+  return Boolean(env.STRIPE_SECRET_KEY && env.STRIPE_PRICE_ID);
+}

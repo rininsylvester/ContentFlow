@@ -24,7 +24,31 @@ Zod · Vitest · Playwright.
 | Content Calendar     | Month and week views; drag and drop by mouse, touch or keyboard; status: idea → scripted → filmed → posted                         |
 | Billing              | Stripe Checkout, Customer Portal and webhooks; 5-generation trial, then a 400-generation monthly fair-use cap                      |
 
-## Local development
+## Try it locally in one command (no accounts or keys)
+
+```bash
+pnpm install
+pnpm demo        # then open http://localhost:3000/login → "Continue with demo account"
+```
+
+`pnpm demo` needs only Node.js 22 and pnpm. There's no Docker, Supabase, Anthropic or Stripe
+involved. It:
+
+- runs an **embedded Postgres** ([PGlite](https://pglite.dev)) with the real migrations, storing
+  data in `./.demo` so it's kept between runs;
+- adds a **demo sign-in** button to the login page;
+- returns **sample AI output** in every tool;
+- replaces Stripe with an **"Activate demo subscription"** button on the billing page, so you can
+  see the subscriber screens.
+
+Everything else is the real app: the trial limit and paywall, usage meter, library, calendar,
+brand voice, onboarding and so on. Run `pnpm demo --reset` to start fresh, for example to try
+the trial and paywall again.
+
+The demo sign-in and demo subscription only work on a development server. Production builds
+answer 404 to both and don't show the button.
+
+## Local development (real services)
 
 ### Prerequisites
 

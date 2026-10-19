@@ -2,6 +2,7 @@ import { AlertTriangle, Check, CircleCheck, CreditCard, Info } from "lucide-reac
 import Link from "next/link";
 import { Suspense } from "react";
 import { ManageBillingButton, SubscribeButton } from "@/components/billing/billing-actions";
+import { DemoSubscribeButton } from "@/components/demo/demo-subscribe";
 import { UsageMeter } from "@/components/shell/usage-meter";
 import { ToolHeader } from "@/components/tools/tool-header";
 import { Badge } from "@/components/ui/badge";
@@ -17,8 +18,10 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentUser } from "@/lib/auth";
 import { PLAN } from "@/lib/billing/plan";
+import { isBillingConfigured } from "@/lib/billing/stripe";
 import { hasActiveSubscription } from "@/lib/billing/usage-summary";
 import { getUsageSummary } from "@/lib/db/queries/usage";
+import { isE2EAuthEnabled } from "@/lib/e2e";
 
 export const metadata = { title: "Billing" };
 
@@ -90,10 +93,19 @@ async function BillingDetails({
       {params.checkout === "canceled" && (
         <Notice tone="info">Checkout canceled. You haven&apos;t been charged.</Notice>
       )}
-      {params.error && (
-        <Notice tone="warning">
-          We couldn&apos;t reach the payment provider. Please try again in a moment.
+      {params.error === "not_configured" || (!isBillingConfigured() && !active) ? (
+        <Notice tone="info">
+          Payments aren&apos;t set up on this server yet (Stripe keys are missing), so Subscribe
+          won&apos;t work.
+          {isE2EAuthEnabled() &&
+            " In demo mode, use “Activate demo subscription” to try the subscriber screens."}
         </Notice>
+      ) : (
+        params.error && (
+          <Notice tone="warning">
+            We couldn&apos;t reach the payment provider. Please try again in a moment.
+          </Notice>
+        )
       )}
       {user.subscriptionStatus === "past_due" && (
         <Notice tone="warning">
@@ -161,6 +173,7 @@ async function BillingDetails({
           </CardContent>
           <CardFooter className="flex flex-wrap gap-2">
             <SubscribeButton />
+            {isE2EAuthEnabled() && <DemoSubscribeButton />}
             {user.stripeCustomerId && <ManageBillingButton />}
           </CardFooter>
         </Card>
