@@ -3,8 +3,10 @@ import { z } from "zod";
 
 const serverSchema = z.object({
   DATABASE_URL: z.string().min(1),
-  // Required from Phase 2 / Phase 5 respectively; optional until those features ship.
+  // Optional so the app boots without it; AI routes return `not_configured` until set
+  // (or use AI_MOCK=1 locally).
   ANTHROPIC_API_KEY: z.string().optional(),
+  // Required from Phase 5.
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   STRIPE_PRICE_ID: z.string().optional(),

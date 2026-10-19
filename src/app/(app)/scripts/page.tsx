@@ -1,8 +1,15 @@
-import { ToolPlaceholderPage } from "@/components/tools/tool-placeholder-page";
+import { ScriptTool } from "@/components/tools/script/script-tool";
+import { ToolHeader } from "@/components/tools/tool-header";
 import { findNavItem } from "@/lib/tools";
 
-export const metadata = { title: findNavItem("script").label };
+const item = findNavItem("script");
+export const metadata = { title: item.label };
 
 export default function ScriptsPage() {
-  return <ToolPlaceholderPage id="script" phase={2} />;
+  return (
+    <div className="mx-auto flex max-w-6xl flex-col gap-8">
+      <ToolHeader item={item} />
+      <ScriptTool />
+    </div>
+  );
 }

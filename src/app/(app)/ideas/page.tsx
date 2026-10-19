@@ -1,8 +1,15 @@
-import { ToolPlaceholderPage } from "@/components/tools/tool-placeholder-page";
+import { IdeasTool } from "@/components/tools/ideas/ideas-tool";
+import { ToolHeader } from "@/components/tools/tool-header";
 import { findNavItem } from "@/lib/tools";
 
-export const metadata = { title: findNavItem("ideas").label };
+const item = findNavItem("ideas");
+export const metadata = { title: item.label };
 
 export default function IdeasPage() {
-  return <ToolPlaceholderPage id="ideas" phase={2} />;
+  return (
+    <div className="mx-auto flex max-w-6xl flex-col gap-8">
+      <ToolHeader item={item} />
+      <IdeasTool />
+    </div>
+  );
 }
