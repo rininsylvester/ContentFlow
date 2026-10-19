@@ -37,8 +37,9 @@ function getClient(): Anthropic {
   return client;
 }
 
+/** Sample output for local development and tests. Never active in production builds. */
 export function isMockMode(): boolean {
-  return process.env.AI_MOCK === "1";
+  return process.env.AI_MOCK === "1" && process.env.NODE_ENV !== "production";
 }
 
 /** Throws early (before a generation is reserved) if no provider is usable. */

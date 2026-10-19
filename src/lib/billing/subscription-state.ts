@@ -39,12 +39,14 @@ const toDate = (seconds: number | null | undefined) =>
  */
 export function billingStateFromSubscription(sub: Stripe.Subscription): BillingState {
   const items = sub.items?.data ?? [];
-  const starts = items
-    .map((i) => i.current_period_start)
-    .filter((n): n is number => typeof n === "number");
-  const ends = items
-    .map((i) => i.current_period_end)
-    .filter((n): n is number => typeof n === "number");
+  // Webhook endpoints pinned to API versions before 2025-03-31 put the period on the subscription itself.
+  const legacy = sub as unknown as { current_period_start?: number; current_period_end?: number };
+  const starts = [...items.map((i) => i.current_period_start), legacy.current_period_start].filter(
+    (n): n is number => typeof n === "number",
+  );
+  const ends = [...items.map((i) => i.current_period_end), legacy.current_period_end].filter(
+    (n): n is number => typeof n === "number",
+  );
   return {
     stripeSubscriptionId: sub.id,
     subscriptionStatus: mapStripeStatus(sub.status),

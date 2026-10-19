@@ -103,31 +103,19 @@ return sample output.
 4. **Local testing:** run `stripe listen --forward-to localhost:3000/api/stripe/webhook` and use
    the `whsec_...` value it prints as `STRIPE_WEBHOOK_SECRET`.
 
-## Deploying to Vercel
+## Deploying to production
 
-1. **Import the repository** in Vercel. The framework and pnpm are detected automatically. Set
-   Node.js to 22.x under Project Settings → Build & Development.
-2. **Environment variables:** add every variable from the table above for Production (and
-   Preview if you use previews). Set `NEXT_PUBLIC_SITE_URL` to your production URL, for example
-   `https://creatorhub.app`. Don't set `AI_MOCK`.
-3. **Database:** use the Supabase **transaction pooler** connection string (port 6543) as
-   `DATABASE_URL`. Then apply the migrations once from your machine:
-   ```bash
-   DATABASE_URL="postgresql://...:6543/postgres" pnpm db:migrate
-   ```
-4. **Supabase Auth:** add the production `.../auth/callback` URL to the allowed redirect URLs and
-   set the Site URL (see above).
-5. **Stripe:** switch to live mode, create the product and price, the webhook endpoint for your
-   domain and the Customer Portal configuration. Use the live keys in Vercel.
-6. **Deploy.** Then check the following:
-   - The landing page loads, and sign-in works by email link and by Google.
-   - Onboarding appears for a new account, and a generation streams in.
-   - The 6th generation shows the paywall, Checkout completes, and the billing page shows
-     **Active**.
-   - Stripe → Webhooks shows successful (2xx) deliveries.
+**Follow [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).** It's a step-by-step guide covering:
 
-Generation requests can stream for up to 120 seconds (`maxDuration` on `/api/ai/[task]`), which
-needs Vercel's Fluid compute; it's on by default for new projects.
+- the Supabase project, migrations, auth URLs, custom SMTP and Google sign-in;
+- the Anthropic key, billing and spend limit;
+- the Stripe product, price, portal and webhook, in test mode and then live;
+- Vercel environment variables, region and domain;
+- an end-to-end test, a launch checklist and troubleshooting.
+
+When the app starts in production it checks its own configuration. Vercel logs show a `[config]`
+message listing anything missing or misconfigured. `AI_MOCK` and the test-only sign-in are ignored
+in production builds.
 
 ## Scripts
 
