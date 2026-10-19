@@ -45,11 +45,13 @@ export function CommandPalette() {
         size="sm"
         onClick={() => setOpen(true)}
         className="w-full max-w-64 justify-start text-muted-foreground sm:w-64"
-        aria-label="Open command palette"
       >
-        <Search />
-        <span className="hidden sm:inline">Jump to a tool…</span>
-        <kbd className="pointer-events-none ml-auto hidden rounded border bg-muted px-1.5 font-mono text-[10px] font-medium sm:inline">
+        <Search aria-hidden />
+        <span className="sr-only sm:not-sr-only">Jump to a tool…</span>
+        <kbd
+          aria-hidden
+          className="pointer-events-none ml-auto hidden rounded border bg-muted px-1.5 font-mono text-[10px] font-medium sm:inline"
+        >
           ⌘K
         </kbd>
       </Button>

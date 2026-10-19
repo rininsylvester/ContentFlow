@@ -22,9 +22,12 @@ export function UserMenu({ email, displayName }: { email: string; displayName: s
         <Button
           variant="ghost"
           className="h-10 w-full justify-start gap-2 px-2 group-data-[collapsed=true]/sidebar:justify-center"
-          aria-label="Account menu"
         >
-          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
+          <span className="sr-only">Account menu for </span>
+          <span
+            aria-hidden
+            className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary"
+          >
             {initial}
           </span>
           <span className="truncate text-sm group-data-[collapsed=true]/sidebar:sr-only">

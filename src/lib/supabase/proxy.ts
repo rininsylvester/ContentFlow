@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { publicEnv } from "@/lib/env";
+import { E2E_COOKIE, e2eUserIdFromCookie } from "@/lib/e2e";
 import { isAppPath } from "@/lib/routes";
 
 /**
@@ -31,7 +32,9 @@ export async function updateSession(request: NextRequest) {
 
   // Do not run code between createServerClient and getClaims().
   const { data } = await supabase.auth.getClaims();
-  const isSignedIn = Boolean(data?.claims?.sub);
+  const isSignedIn =
+    Boolean(data?.claims?.sub) ||
+    Boolean(e2eUserIdFromCookie(request.cookies.get(E2E_COOKIE)?.value));
   const { pathname, search } = request.nextUrl;
 
   if (!isSignedIn && isAppPath(pathname)) {
