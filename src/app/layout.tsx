@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { publicEnv } from "@/lib/env";
 import "./globals.css";
 
@@ -37,10 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem={false}
           disableTransitionOnChange
         >
-          <TooltipProvider>
-            {children}
-            <Toaster position="bottom-right" />
-          </TooltipProvider>
+          {children}
         </ThemeProvider>
       </body>
     </html>

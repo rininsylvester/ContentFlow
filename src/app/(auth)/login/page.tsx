@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LoginForm } from "./login-form";
@@ -17,7 +18,15 @@ export default function LoginPage() {
         <LoginForm />
       </Suspense>
       <p className="text-center text-xs text-muted-foreground">
-        By continuing you agree to our terms and privacy policy.
+        By continuing you agree to our{" "}
+        <Link href="/terms" className="underline underline-offset-4 hover:text-foreground">
+          Terms
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">
+          Privacy Policy
+        </Link>
+        .
       </p>
     </div>
   );
